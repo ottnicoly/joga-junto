@@ -1,0 +1,6 @@
+CREATE TABLE financial_responsible (
+    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    cpf VARCHAR(11) NOT NULL
+);
