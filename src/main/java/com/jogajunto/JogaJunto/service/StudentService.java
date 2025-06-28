@@ -1,7 +1,9 @@
 package com.jogajunto.JogaJunto.service;
 
+import com.jogajunto.JogaJunto.dao.student.StudentDetailsDAO;
 import com.jogajunto.JogaJunto.dto.FinancialResponsibleRequestDTO;
 import com.jogajunto.JogaJunto.dto.StudentRequestDTO;
+import com.jogajunto.JogaJunto.mapper.StudentMapper;
 import com.jogajunto.JogaJunto.model.Classroom;
 import com.jogajunto.JogaJunto.model.FinancialResponsible;
 import com.jogajunto.JogaJunto.model.Student;
@@ -10,6 +12,7 @@ import com.jogajunto.JogaJunto.repository.ClassroomRepository;
 import com.jogajunto.JogaJunto.repository.FinancialResponsibleRepository;
 import com.jogajunto.JogaJunto.repository.StudentRepository;
 import com.jogajunto.JogaJunto.repository.TeacherRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +39,9 @@ public class StudentService {
 
     @Autowired
     ClassroomRepository classroomRepository;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     public List<Student> getAllStudents(){
         var students = studentRepository.findAll();
@@ -86,6 +92,28 @@ public class StudentService {
         Teacher teacher = teacherRepository.findByUserId(user);
         student.setTeacher(teacher);
 
+        double mensalidade = 120.0;
+
+        if (student.getFinancialResponsibles() != null && !student.getFinancialResponsibles().isEmpty()) {
+            for (FinancialResponsible responsible : student.getFinancialResponsibles()) {
+                List<Student> siblings = studentRepository.findByFinancialResponsiblesContaining(responsible);
+
+                siblings.removeIf(s -> s.getCpf().equals(student.getCpf()));
+
+                if (!siblings.isEmpty()) {
+                    for (Student sibling : siblings) {
+                        sibling.setMonthlyFee(90.0);
+                    }
+                    studentRepository.saveAll(siblings);
+
+                    mensalidade = 90.0;
+                }
+            }
+        }
+
+        student.setMonthlyFee(mensalidade);
+        student.setPaymentUpToDate(false);
+
         studentRepository.save(student);
         return student;
     }
@@ -113,6 +141,20 @@ public class StudentService {
         }
 
         return studentRepository.save(student);
+    }
+
+    public StudentDetailsDAO getStudentDetails(Integer id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+
+        return studentMapper.toDetailsDAO(student);
+    }
+
+    public void deleteStudentById(Integer id) {
+        if (!studentRepository.existsById(id)) {
+            throw new EntityNotFoundException("Estudante com ID " + id + " não encontrado.");
+        }
+        studentRepository.deleteById(id);
     }
 
 }

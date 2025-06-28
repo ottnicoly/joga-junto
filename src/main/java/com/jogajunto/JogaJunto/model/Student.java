@@ -1,6 +1,7 @@
 package com.jogajunto.JogaJunto.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "student")
 public class Student {
@@ -34,7 +36,6 @@ public class Student {
     )
     private List<FinancialResponsible> financialResponsibles;
 
-    //lista?
     @ManyToOne
     @JoinColumn(name = "classroom_id")
     private Classroom classrooms;
@@ -43,104 +44,14 @@ public class Student {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    public Student(Integer id, String name, LocalDate birthDate, String motherName, String fatherName, String address, String phone, String cpf, List<FinancialResponsible> financialResponsibles, Classroom classrooms) {
-        this.id = id;
-        this.name = name;
-        this.birthDate = birthDate;
-        this.motherName = motherName;
-        this.fatherName = fatherName;
-        this.address = address;
-        this.phone = phone;
-        this.cpf = cpf;
-        this.financialResponsibles = financialResponsibles;
-        this.classrooms = classrooms;
-    }
+    private Double monthlyFee;
 
-    public Teacher getTeacher() {
-        return teacher;
-    }
+    private boolean paymentUpToDate = false;
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
+    @ManyToMany(mappedBy = "students")
+    private List<Payment> payments;
 
-    public Classroom getClassrooms() {
-        return classrooms;
-    }
+    @ManyToMany(mappedBy = "student")
+    private List<Presence> presences;
 
-    public void setClassrooms(Classroom classrooms) {
-        this.classrooms = classrooms;
-    }
-
-    public List<FinancialResponsible> getFinancialResponsibles() {
-        return financialResponsibles;
-    }
-
-    public void setFinancialResponsibles(List<FinancialResponsible> financialResponsibles) {
-        this.financialResponsibles = financialResponsibles;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getFatherName() {
-        return fatherName;
-    }
-
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
-    }
-
-    public String getMotherName() {
-        return motherName;
-    }
-
-    public void setMotherName(String motherName) {
-        this.motherName = motherName;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }

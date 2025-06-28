@@ -1,7 +1,11 @@
 package com.jogajunto.JogaJunto.controller;
 
+import com.jogajunto.JogaJunto.dao.student.StudentDAO;
+import com.jogajunto.JogaJunto.dao.student.StudentDetailsDAO;
+import com.jogajunto.JogaJunto.dao.student.StudentSimpleDAO;
 import com.jogajunto.JogaJunto.dto.AddResponsiblesRequestDTO;
 import com.jogajunto.JogaJunto.dto.StudentRequestDTO;
+import com.jogajunto.JogaJunto.mapper.StudentMapper;
 import com.jogajunto.JogaJunto.model.Student;
 import com.jogajunto.JogaJunto.model.Teacher;
 import com.jogajunto.JogaJunto.repository.StudentRepository;
@@ -30,18 +34,33 @@ public class StudentController {
     StudentRepository studentRepository;
 
     @GetMapping
-    private ResponseEntity getAllStudents(JwtAuthenticationToken token){
+    public ResponseEntity<List<StudentDAO>> getAllStudents(JwtAuthenticationToken token) {
         UUID userId = UUID.fromString(token.getToken().getSubject());
         Teacher teacher = teacherRepository.findByUserId(userId);
 
         var students = studentRepository.findByTeacher(teacher);
-        return ResponseEntity.ok(students);
+        var daos = students.stream()
+                .map(StudentMapper::toDAO)
+                .toList();
+
+        return ResponseEntity.ok(daos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDetailsDAO> getStudentDetails(@PathVariable Integer id) {
+        var details = studentService.getStudentDetails(id);
+        return ResponseEntity.ok(details);
     }
 
     @GetMapping("/byClassroom/{classroomId}")
-    public ResponseEntity<List<Student>> getStudentsByClassroom(@PathVariable Integer classroomId) {
+    public ResponseEntity<List<StudentSimpleDAO>> getStudentsByClassroom(@PathVariable Integer classroomId) {
         List<Student> students = studentService.getStudentsByClassroomId(classroomId);
-        return ResponseEntity.ok(students);
+
+        List<StudentSimpleDAO> daos = students.stream()
+                .map(StudentMapper::toSimpleDAO)
+                .toList();
+
+        return ResponseEntity.ok(daos);
     }
 
     @PostMapping
@@ -58,4 +77,9 @@ public class StudentController {
         return ResponseEntity.ok(updatedStudent);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
+        studentService.deleteStudentById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
