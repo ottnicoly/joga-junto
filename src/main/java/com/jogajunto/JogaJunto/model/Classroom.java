@@ -1,11 +1,19 @@
-package com.jogajunto.JogaJunto.domain.classroom;
+package com.jogajunto.JogaJunto.model;
 
-import com.jogajunto.JogaJunto.domain.teacher.Teacher;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jogajunto.JogaJunto.model.enums.DaysOfWeek;
+import com.jogajunto.JogaJunto.dto.RequestClassroomDTO;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "classroom")
 public class Classroom {
 
@@ -22,15 +30,17 @@ public class Classroom {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
+    @JsonIgnore
     private Teacher teacher;
 
-//    adicionar alunos?
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<Student> students;
 
     public Classroom (RequestClassroomDTO data) {
         this.classType = data.classType();
         this.classTime = data.classTime();
         this.daysOfWeek = data.daysOfWeek();
-        this.teacher = data.teacher();
     }
 
 }

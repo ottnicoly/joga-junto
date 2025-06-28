@@ -1,4 +1,4 @@
-package com.jogajunto.JogaJunto.domain.financialresponsible;
+package com.jogajunto.JogaJunto.dto;
 
 public record FinancialResponsibleRequestDTO(
         String name,

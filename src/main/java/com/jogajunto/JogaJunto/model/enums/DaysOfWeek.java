@@ -1,4 +1,4 @@
-package com.jogajunto.JogaJunto.domain.classroom;
+package com.jogajunto.JogaJunto.model.enums;
 
 public enum DaysOfWeek {
     MOONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY

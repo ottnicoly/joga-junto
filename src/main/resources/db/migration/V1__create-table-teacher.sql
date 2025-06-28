@@ -1,7 +1,0 @@
-CREATE TABLE teacher (
-    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    birth_date DATE NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(15) NOT NULL
-);

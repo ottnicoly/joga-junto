@@ -1,8 +1,8 @@
 package com.jogajunto.JogaJunto.service;
 
-import com.jogajunto.JogaJunto.domain.financialresponsible.FinancialResponsible;
-import com.jogajunto.JogaJunto.domain.financialresponsible.FinancialResponsibleRepository;
-import com.jogajunto.JogaJunto.domain.financialresponsible.FinancialResponsibleRequestDTO;
+import com.jogajunto.JogaJunto.model.FinancialResponsible;
+import com.jogajunto.JogaJunto.repository.FinancialResponsibleRepository;
+import com.jogajunto.JogaJunto.dto.FinancialResponsibleRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,11 @@ public class FinancialResponsibleService {
             }
         }
         return false;
+    }
+
+    public FinancialResponsible findOrCreate(FinancialResponsibleRequestDTO data) {
+        return repository.findByCpf(data.cpf())
+                .orElseGet(() -> repository.save(new FinancialResponsible(data)));
     }
 
 }

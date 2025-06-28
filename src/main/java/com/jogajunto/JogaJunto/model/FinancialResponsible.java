@@ -1,6 +1,6 @@
-package com.jogajunto.JogaJunto.domain.financialresponsible;
+package com.jogajunto.JogaJunto.model;
 
-import com.jogajunto.JogaJunto.domain.student.Student;
+import com.jogajunto.JogaJunto.dto.FinancialResponsibleRequestDTO;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 

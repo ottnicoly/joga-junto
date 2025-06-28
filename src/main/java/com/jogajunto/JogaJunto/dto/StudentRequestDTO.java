@@ -1,6 +1,6 @@
-package com.jogajunto.JogaJunto.domain.student;
+package com.jogajunto.JogaJunto.dto;
 
-import com.jogajunto.JogaJunto.domain.financialresponsible.FinancialResponsibleRequestDTO;
+import com.jogajunto.JogaJunto.model.enums.Period;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +16,7 @@ public record StudentRequestDTO(
         String address,
         String phone,
         String cpf,
-        List<FinancialResponsibleRequestDTO> financialResponsibles
+        Integer classroom_id,
+        List<FinancialResponsibleRequestDTO> financialResponsible
 ) {
 }

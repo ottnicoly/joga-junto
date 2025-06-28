@@ -1,6 +1,7 @@
 package com.jogajunto.JogaJunto.controller.auth;
 
 import com.jogajunto.JogaJunto.dto.CreateUserRequest;
+import com.jogajunto.JogaJunto.dto.TeacherRequestDTO;
 import com.jogajunto.JogaJunto.model.auth.User;
 import com.jogajunto.JogaJunto.service.auth.UserService;
 import jakarta.transaction.Transactional;
@@ -36,6 +37,12 @@ public class UserController {
         List<User> users = userService.getUser();
 
         return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody TeacherRequestDTO dto) {
+        userService.registerTeacherWithUser(dto);
+        return ResponseEntity.status(201).build();
     }
 
 }

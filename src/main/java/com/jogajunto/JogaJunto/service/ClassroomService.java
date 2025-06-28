@@ -1,8 +1,8 @@
 package com.jogajunto.JogaJunto.service;
 
-import com.jogajunto.JogaJunto.domain.classroom.Classroom;
-import com.jogajunto.JogaJunto.domain.classroom.ClassroomRepository;
-import com.jogajunto.JogaJunto.domain.classroom.RequestClassroomDTO;
+import com.jogajunto.JogaJunto.model.Classroom;
+import com.jogajunto.JogaJunto.repository.ClassroomRepository;
+import com.jogajunto.JogaJunto.dto.RequestClassroomDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
