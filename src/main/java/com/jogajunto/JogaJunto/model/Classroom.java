@@ -1,8 +1,8 @@
 package com.jogajunto.JogaJunto.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jogajunto.JogaJunto.model.enums.DaysOfWeek;
 import com.jogajunto.JogaJunto.dto.RequestClassroomDTO;
+import com.jogajunto.JogaJunto.model.enums.DaysOfWeek;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +19,14 @@ public class Classroom {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
     private String classType;
     private String classTime;
 
-    //diz ao JPA para armazenar a lista em uma tabela separada, mas ainda manter a relação com a entidade
-    @ElementCollection //diz ao JPA q essa lista n é outra entidade e sim uma coleção
+    @ElementCollection
     @CollectionTable(name = "classroom_days", joinColumns = @JoinColumn(name = "classroom_id"))
     @Column(name = "day")
+    @Enumerated(EnumType.STRING)
     private List<DaysOfWeek> daysOfWeek;
 
     @ManyToOne
@@ -33,14 +34,13 @@ public class Classroom {
     @JsonIgnore
     private Teacher teacher;
 
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(mappedBy = "classrooms")
     private List<Student> students;
 
     public Classroom (RequestClassroomDTO data) {
+        this.name = data.name();
         this.classType = data.classType();
         this.classTime = data.classTime();
         this.daysOfWeek = data.daysOfWeek();
     }
-
 }
