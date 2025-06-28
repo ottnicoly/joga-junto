@@ -9,8 +9,13 @@ import com.jogajunto.JogaJunto.repository.PresenceRepository;
 import com.jogajunto.JogaJunto.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -57,4 +62,45 @@ public class PresenceService {
         LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
         return repository.findAllByClassroomIdAndDateBetween(classroomId, start, end);
     }
+
+    public void processCsv(MultipartFile file, Classroom classroom) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            String line = br.readLine(); // lê e descarta o cabeçalho
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(","); // separador TAB
+
+                if (data.length != 3) {
+                    throw new IllegalArgumentException("Linha inválida no CSV: " + line);
+                }
+
+                LocalDate date = LocalDate.parse(data[0].trim(), formatter);
+                String studentName = data[1].trim();
+                String statusStr = data[2].trim();
+
+                Student student = studentRepository.findByName(studentName)
+                        .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado: " + studentName));
+
+                Presence presence = new Presence();
+                presence.setStudent(student);
+                presence.setDate(date);
+                presence.setClassroom(classroom);
+
+                if ("C".equalsIgnoreCase(statusStr)) {
+                    presence.setPresence(true);
+                } else if ("F".equalsIgnoreCase(statusStr)) {
+                    presence.setPresence(false);
+                } else {
+                    throw new IllegalArgumentException("Status inválido no CSV: " + statusStr);
+                }
+
+                repository.save(presence);
+            }
+        }
+    }
+
+    public List<Student> getStudentsByClassroom(Integer classroomId) {
+        return studentRepository.findByClassrooms_Id(classroomId);
+    }
+
 }
