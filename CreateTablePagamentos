@@ -1,6 +1,6 @@
-CREATE TABLE pagamentos (
+CREATE TABLE payments (
     ID SERIAL PRIMARY KEY,
-    data_pagamento VARCHAR(10),
-    responsavel_pagamento VARCHAR(255),
-    valor NUMERIC(10,2)
+    payment_date VARCHAR(10),
+    financial_responsable VARCHAR(255),
+    value NUMERIC(10,2)
 );
