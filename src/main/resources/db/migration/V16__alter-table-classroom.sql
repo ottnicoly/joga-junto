@@ -1,0 +1,1 @@
+ALTER TABLE classroom ADD COLUMN name VARCHAR(100);

@@ -1,0 +1,2 @@
+ALTER TABLE payments DROP CONSTRAINT IF EXISTS fk_student;
+ALTER TABLE payments DROP COLUMN IF EXISTS student_id;

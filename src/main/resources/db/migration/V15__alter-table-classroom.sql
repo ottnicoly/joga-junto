@@ -1,0 +1,1 @@
+ALTER TABLE classroom DROP CONSTRAINT classroom_teacher_id_key;

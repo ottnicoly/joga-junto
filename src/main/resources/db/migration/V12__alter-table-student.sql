@@ -1,0 +1,2 @@
+ALTER TABLE student
+ADD COLUMN payment_up_to_date BOOLEAN DEFAULT FALSE;
