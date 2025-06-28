@@ -2,10 +2,14 @@ package com.jogajunto.JogaJunto.model;
 
 import com.jogajunto.JogaJunto.dto.FinancialResponsibleRequestDTO;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "financial_responsible")
@@ -27,7 +31,4 @@ public class FinancialResponsible {
         this.cpf = data.cpf();
     }
 
-    public String getCpf() {
-        return cpf;
-    }
 }
