@@ -1,0 +1,6 @@
+CREATE TABLE pagamentos (
+    ID SERIAL PRIMARY KEY,
+    data_pagamento VARCHAR(10),
+    responsavel_pagamento VARCHAR(255),
+    valor NUMERIC(10,2)
+);
