@@ -1,6 +1,10 @@
 package com.jogajunto.JogaJunto.controller;
 
+import com.jogajunto.JogaJunto.dao.PaymentDAO;
 import com.jogajunto.JogaJunto.dto.PaymentDTO;
+import com.jogajunto.JogaJunto.mapper.PaymentMapper;
+import com.jogajunto.JogaJunto.model.Payment;
+import com.jogajunto.JogaJunto.repository.PaymentRepository;
 import com.jogajunto.JogaJunto.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,9 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
     @PostMapping("/csv")
     public ResponseEntity<String> uploadPaymentsCsv(@RequestParam("file") MultipartFile file) {
         try {
@@ -27,6 +34,14 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao processar CSV: " + e.getMessage());
         }
     }
+
+    @GetMapping
+    public ResponseEntity<List<PaymentDAO>> getAllPayments() {
+        List<Payment> payments = paymentRepository.findAll();
+        List<PaymentDAO> daos = payments.stream().map(PaymentMapper::toDAO).toList();
+        return ResponseEntity.ok(daos);
+    }
+
 
 
 }

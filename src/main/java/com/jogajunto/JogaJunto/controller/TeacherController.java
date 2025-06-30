@@ -7,10 +7,11 @@ import com.jogajunto.JogaJunto.repository.TeacherRepository;
 import com.jogajunto.JogaJunto.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/teacher")
 public class TeacherController {
 

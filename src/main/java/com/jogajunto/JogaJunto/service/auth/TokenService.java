@@ -32,14 +32,16 @@ public class TokenService {
 
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
 
+        System.out.println("Login solicitado para username: '" + loginRequest.username() + "'");
         var user = userRepository.findByUsername(loginRequest.username());
+        System.out.println("User encontrado? " + user.isPresent());
 
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequest, passwordEncoder)){
             throw new BadCredentialsException("user or password is invalid!");
         }
 
         var now = Instant.now();
-        var expiresIn = 300L;
+        var expiresIn = 86400L;
 
         var scopes = user.get().getRoles()
                 .stream()

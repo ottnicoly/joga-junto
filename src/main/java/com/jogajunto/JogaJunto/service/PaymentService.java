@@ -81,11 +81,14 @@ public class PaymentService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             for (CSVRecord record : records) {
-                LocalDate date = LocalDate.parse(record.get("Data Lançamento"), formatter);
-                String payer = record.get("Descrição");
-                Double amount = Double.parseDouble(record.get("Valor"));
-
-                payments.add(new PaymentDTO(date, payer, amount));
+                try {
+                    LocalDate date = LocalDate.parse(record.get("Data Lançamento"), formatter);
+                    String payer = record.get("Descrição");
+                    Double amount = Double.parseDouble(record.get("Valor"));
+                    payments.add(new PaymentDTO(date, payer, amount));
+                } catch (Exception e) {
+                    throw new IOException("Erro ao processar linha: " + record.getRecordNumber() + " - " + e.getMessage());
+                }
             }
         }
         return payments;
